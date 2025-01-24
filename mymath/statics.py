@@ -27,29 +27,48 @@ def Gamma(k):
         x += dx
     return value
 
+def Covariance(X, Y):
+    n = len(X)
+    return sum((X - mean(X)) * (Y - mean(Y))) / (n - 1)
+
 if __name__ == '__main__':
-    # p = 0
-    # p  = p + binom(20, 17) * (0.8 ** 17) * (0.2 ** 3)
-    # p  = p + binom(20, 18) * (0.8 ** 18) * (0.2 ** 2)
-    # p  = p + binom(20, 19) * (0.8 ** 19) * (0.2 ** 1)
-    # p  = p + binom(20, 20) * (0.8 ** 20) * (0.2 ** 0)
-    # print(p)
-    # print(1 - p)
-    # p = 0
-    # p = p + binom(12,10) * 0.788 ** 10 * 0.212 ** 2
-    # p = p + binom(12,11) * 0.788 ** 11 * 0.212 ** 1
-    # p = p + binom(12,12) * 0.788 ** 12 * 0.212 ** 0
-    # print(p)
-    # print(1-p)
-    # p = 0
-    # p = p + 6 ** 0 * math.exp(-6) / math.factorial(0)
-    # p = p + 6 ** 1 * math.exp(-6) / math.factorial(1)
-    # p = p + 6 ** 2 * math.exp(-6) / math.factorial(2)
-    # p = p + 6 ** 3 * math.exp(-6) / math.factorial(3)
-    # p = p + 6 ** 4 * math.exp(-6) / math.factorial(4)
-    # print(p)
-    # print(math.factorial(22)/(math.factorial(5)*math.factorial(5)*math.factorial(5)*math.factorial(7))*.08**5*.19**5*.42**5*.31**7)
-    # print(Gamma(7.2))
-    print(Gamma(7.2+2.3)/(Gamma(7.2)*Gamma(2.3)))
-    print(97.34836052512742 * 0.008867)
-    exit()
+    # D = np.array([125, 250, 0, 100, -50, -75, 150, 300, 125, 200])
+    # mu = mean(D)
+    # print(D - mu)
+    # print((D - mu) ** 2)
+    # print(sum((D - mu) ** 2))
+    # print(sum((D - mu) ** 2) / (len(D)-1))
+    # print(mean(D))
+    # print(sample_variance(D))
+    # print(sample_variance(D) ** 0.5)
+    x = np.array([10,12,14,15,18,19,23])
+    y = np.array([25,30,36,37,42,50,55])
+    xy = x @ y
+    x_bar = mean(x)
+    y_bar = mean(y)
+    x_square = x @ x
+    y_square = y @ y
+    n = len(x)
+    r = (xy - n * x_bar * y_bar) / (math.sqrt(x_square - n * x_bar ** 2) * math.sqrt(y_square - n * y_bar ** 2))
+    # print(r)
+    t = r * math.sqrt(n - 2) / math.sqrt(1 - r ** 2)
+    # print(t)
+    beta = (n * np.sum(x @ y) - np.sum(x) * np.sum(y))/(n*np.sum(x**2) - np.sum(x)**2)
+    # print(beta)
+    alpha = y_bar - beta * x_bar
+    # print(alpha)
+    # print(alpha + beta * 8)
+    SSE = np.sum(y ** 2) - alpha * np.sum(y) - beta * np.sum(x @ y)
+    # print(SSE)
+    var = SSE / (n - 2)
+    # print(var)
+    sigma = math.sqrt(var)
+    # print(sigma)
+    t = 2.571
+    SXX = np.sum(x ** 2) - np.sum(x) ** 2 / n
+    # print(beta - t * sigma / math.sqrt(SXX), beta + t * sigma / math.sqrt(SXX))
+    print(alpha + beta * 20)
+    print(alpha + beta * 20 - math.sqrt(1 + 1/n + (20 - x_bar) ** 2 / SXX) * sigma * t)
+    print(alpha + beta * 20 + math.sqrt(1 + 1/n + (20 - x_bar) ** 2 / SXX) * sigma * t)
+    SST = np.sum(y ** 2) - n * y_bar ** 2
+    print(SST)
